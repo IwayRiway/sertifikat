@@ -1,6 +1,6 @@
 <footer class="main-footer">
         <div class="footer-left">
-          Copyright &copy; 2020 <div class="bullet"></div> Develop By <a href="#">Riway Restu Islami Yudha</a>
+          Copyright &copy; 2020 <div class="bullet"></div> Develop By <a href="#">IwayRiway</a>
         </div>
         <div class="footer-right">
           

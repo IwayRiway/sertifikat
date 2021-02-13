@@ -42,7 +42,22 @@ class Sertifikat_karyawan extends CI_Controller {
     {   
         $this->Sertifikat_karyawan_model->save();
         $this->session->set_flashdata('sukses', 'Data Berhasil Simpan');
-        redirect('transaksi');
+        redirect('sertifikat_karyawan');
+    }
+
+    public function search()
+    {
+       $keyword = $_POST['keyword'];
+       $data =  $this->db->query("SELECT a.id as sertifikat_karyawan_id, b.* from sertifikat_karyawan a JOIN sertifikat b ON a.sertifikat_id = b.id JOIN karyawan c ON a.karyawan_id = c.id WHERE c.nik='$keyword' OR c.nama = '$keyword' ")->result_array();
+
+       echo json_encode($data);
+    }
+
+    public function delete($id)
+    {
+        $this->Sertifikat_karyawan_model->delete($id);
+        $this->session->set_flashdata('warning', 'Data Berhasil Dihapus');
+        redirect('sertifikat_karyawan');
     }
 
 }

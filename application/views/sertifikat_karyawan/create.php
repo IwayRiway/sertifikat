@@ -85,7 +85,7 @@
       
   <script>
     $(document).ready(function() {
-      $('#example').DataTable();
+      var table = $('#example').DataTable();
       
       $("#checkbox-all").click(function(){
         $('input:checkbox').not(this).prop('checked', this.checked);
@@ -102,7 +102,19 @@
                 dataType: 'json',
                 data:{id:karyawan_id[0]},
                 success:function(data){
-                  console.log(data);
+                  table.clear();
+                  $.each(data, function (i, key) {
+                     var aksi = `<div class="custom-checkbox custom-control">
+                                   <input type="checkbox" data-checkboxes="mygroup" class="custom-control-input" id="checkbox-all`+data[i].id+`" name="sertifikat_id[]" value="`+data[i].id+`">
+                                   <label for="checkbox-all`+data[i].id+`" class="custom-control-label">&nbsp;</label>
+                                  </div>`;
+
+                     table.row.add([
+                        aksi,
+                        data[i].nama
+                     ]);
+                     table.draw();
+                  });
                 }
           });
 

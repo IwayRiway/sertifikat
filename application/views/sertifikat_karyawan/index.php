@@ -57,18 +57,81 @@
 </div>
 
 <script>
+function alertErr(gagal) {
+      Swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: 'Gagal',
+        text: gagal,
+        showConfirmButton: true
+      //   timer: 2500
+      })
+   }
+
+   function hapus(params) {
+    Swal.fire({
+        title: 'Yakin?',
+        text: "Data ini Akan dihapus..?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yakin!',
+        cancelButtonText: 'Batal'
+      }).then((result) => {
+        if (result.value) {
+          document.location.href = params;
+        }
+      })
+   }
+
     $(document).ready(function() {
         var table2 = $('#example').DataTable();
+
+        $("#search").click(function(){
+            var keyword = $("#keyword").val();
+
+            if(keyword === ''){
+               alertErr("SILAHKAN MASUKKAN DATA YANG INGIN DICARI");
+            }
+
+            $.ajax({
+               url:"<?= base_url('sertifikat_karyawan/search')?>",
+               type:"POST",
+               dataType: 'json',
+               data:{keyword:keyword},
+               success:function(data){
+                  if(data.length <= 0){
+                     alertErr("DATA TIDAK DITEMUKAN");
+                  }
+
+                  var r = 1;
+                  table2.clear();
+                  $.each(data, function (i, key) {
+                     var aksi = `<a href="#" class="btn btn-icon btn-sm btn-danger mr-2" onclick='hapus("<?=base_url('sertifikat_karyawan/delete/')?>`+data[i].sertifikat_karyawan_id+`")' title="Delete"><i class="fas fa-trash"></i></a>`;
+
+                     table2.row.add([
+                        r++,
+                        data[i].nama,
+                        aksi
+                     ]);
+                     table2.draw();
+                  });
+               }
+            });
+
+        });
+
         var buttons2 = new $.fn.dataTable.Buttons(table2, {
             buttons: [{
                 extend: 'excelHtml5',
-                title: 'Daftar Karyawan',
+                title: 'Daftar Sertifikat Karyawan',
                 text: '<i class="fas fa-file-excel"></i>&nbsp; EXCEL',
                 className: 'btn btn-success btn-sm btn-corner',
                 titleAttr: 'Download as Excel'
             },{
                 extend: 'pdfHtml5',
-                title: 'Daftar Karyawan',
+                title: 'Daftar Sertifikat Karyawan',
                 orientation: 'potrait',
                 pageSize: 'A4',
                 className: 'btn btn-danger btn-sm btn-corner',
